@@ -12,7 +12,7 @@ contract UserRegistry {
         string profilePhoto;
         string name;
         string description;
-        string[] skills;
+        string[] skills; // atestations
     }
 
     mapping(address => UserInfo) private UserInformation;
@@ -24,8 +24,8 @@ contract UserRegistry {
     // Users may be SafeMultisig Wallets with a custom module of our own to
     // pay ourselfs the transactions
 
-    modifier onlyUser() {
-        if (isUser(msg.sender) != true) {
+    modifier onlyUser(address _user) {
+        if (isUser(_user) != true) {
             revert NotUser();
         }
         _;

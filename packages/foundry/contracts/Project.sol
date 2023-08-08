@@ -31,7 +31,9 @@ contract Project {
     // }
 
     // modifier onlyManagers {
-    //     if (msg.sender )
+    //     if (manager[msg.sender] != true) {
+    //          return error
+    //     }
     //     _;
     // }
 
