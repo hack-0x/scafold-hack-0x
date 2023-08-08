@@ -54,39 +54,6 @@ contract UserRegistry {
         UserInformation[user].isUser = true;
     }
 
-    function attestSkillAuthorized(
-        address user,
-        string memory skillId
-    ) public onlyAuthorized {
-        // EAS emit, get UID and add to skill array
-        string memory id = "1";
-        UserInformation[user].skills.push(id);
-
-        // emit event for chainlink function
-    }
-
-    function endorseSkillAuthorized(
-        address _from,
-        address _to,
-        string memory skillId
-    ) public onlyAuthorized {
-        // EAS emit endorse Skill;
-    }
-
-    /*
-     *   UserOnly Functions
-     */
-
-    function attestSkill(string memory skill) public onlyUser {
-        // EAS emit, get UID and add to skill array
-        string memory id = skill;
-        UserInformation[msg.sender].skills.push(id);
-    }
-
-    function endorseSkill(address _to, string memory skillId) public onlyUser {
-        // EAS emit endorse Skill;
-    }
-
     /*
      *   Getter and helper Functions
      */
@@ -108,11 +75,5 @@ contract UserRegistry {
 
     function isAuthorized(address user) external view returns (bool) {
         return Authorized[user];
-    }
-
-    function canConvertToBytes32(
-        string memory ejemplo
-    ) public pure returns (bytes memory) {
-        return bytes(ejemplo);
     }
 }
