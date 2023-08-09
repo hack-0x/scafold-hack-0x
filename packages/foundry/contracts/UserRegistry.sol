@@ -3,9 +3,8 @@ pragma solidity >=0.8.0 <0.9.0;
 
 // Useful for debugging. Remove when deploying to a live network.
 import "forge-std/console.sol";
-import "./Attestter.sol";
 
-contract UserRegistry is Attestter {
+contract UserRegistry {
     /// @notice User information
     /// @dev User information lives in EAS
     struct UserInfo {
