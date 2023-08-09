@@ -9,11 +9,11 @@ contract Attester {
     // The address of the global EAS contract.
     IEAS private immutable s_eas;
 
-    error InvalidEAS();
+    error Attester__InvalidEAS();
 
     constructor(IEAS eas) {
         if (address(eas) == address(0)) {
-            revert InvalidEAS();
+            revert Attester__InvalidEAS();
         }
 
         s_eas = eas;

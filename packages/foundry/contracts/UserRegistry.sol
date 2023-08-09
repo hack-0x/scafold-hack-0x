@@ -3,8 +3,9 @@ pragma solidity >=0.8.0 <0.9.0;
 
 // Useful for debugging. Remove when deploying to a live network.
 import "forge-std/console.sol";
+import "./Attestter.sol";
 
-contract UserRegistry {
+contract UserRegistry is Attestter {
     /// @notice User information
     /// @dev User information lives in EAS
     struct UserInfo {
@@ -16,41 +17,41 @@ contract UserRegistry {
     }
 
     mapping(address => UserInfo) private UserInformation;
-    mapping(address => bool) private Authorized;
+    mapping(address => bool) private Admin;
 
-    error NotAuthorized();
-    error NotUser();
+    error UserRegistry__NotAdmin();
+    error UserRegistry__NotUser();
 
     // Users may be SafeMultisig Wallets with a custom module of our own to
     // pay ourselfs the transactions
 
     modifier onlyUser() {
         if (isUser(msg.sender) != true) {
-            revert NotUser();
+            revert UserRegistry__NotUser();
         }
         _;
     }
 
-    modifier onlyAuthorized() {
+    modifier onlyAdmin() {
         if (Authorized[msg.sender] != true) {
-            revert NotAuthorized();
+            revert UserRegistry__NotAdmin();
         }
         _;
     }
 
-    constructor(address _authorized) {
-        Authorized[_authorized] = true;
-        Authorized[msg.sender] = true;
+    constructor(address userRegistry, address _authorized) Attestter(userRegistry) {
+        Admin[_authorized] = true;
+        Admain[msg.sender] = true;
     }
 
     /*
-     *   OnlyAuthorized Functions
+     *   Only Admin Functions
      */
-    function addAuthorized(address _authorized) public onlyAuthorized {
+    function addAdmin(address _authorized) public onlyAdmin {
         Authorized[_authorized] = true;
     }
 
-    function addUser(address user) public onlyAuthorized {
+    function addUser(address user) public onlyAdmin {
         UserInformation[user].isUser = true;
     }
 
@@ -73,7 +74,7 @@ contract UserRegistry {
         return UserInformation[user];
     }
 
-    function isAuthorized(address user) external view returns (bool) {
-        return Authorized[user];
+    function isAdmin(address user) external view returns (bool) {
+        return Admin[user];
     }
 }
