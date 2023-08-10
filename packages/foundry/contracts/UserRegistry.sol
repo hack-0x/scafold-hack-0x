@@ -15,8 +15,8 @@ contract UserRegistry {
         string[] skills; // atestations
     }
 
-    mapping(address => UserInfo) private UserInformation;
-    mapping(address => bool) private Admin;
+    mapping(address => UserInfo) private s_UserInformation;
+    mapping(address => bool) private s_Admin;
 
     error UserRegistry__NotAdmin();
     error UserRegistry__NotUser();
@@ -32,26 +32,26 @@ contract UserRegistry {
     }
 
     modifier onlyAdmin() {
-        if (Authorized[msg.sender] != true) {
+        if (s_Admin[msg.sender] != true) {
             revert UserRegistry__NotAdmin();
         }
         _;
     }
 
-    constructor(address userRegistry, address _authorized) Attestter(userRegistry) {
-        Admin[_authorized] = true;
-        Admain[msg.sender] = true;
+    constructor(address _userRegistry, address _admin) {
+        s_Admin[_admin] = true;
+        s_Admin[msg.sender] = true;
     }
 
     /*
      *   Only Admin Functions
      */
-    function addAdmin(address _authorized) public onlyAdmin {
-        Authorized[_authorized] = true;
+    function addAdmin(address _admin) public onlyAdmin {
+        s_Admin[_admin] = true;
     }
 
-    function addUser(address user) public onlyAdmin {
-        UserInformation[user].isUser = true;
+    function addUser(address _user) public onlyAdmin {
+        s_UserInformation[_user].isUser = true;
     }
 
     /*
@@ -59,21 +59,21 @@ contract UserRegistry {
      */
 
     /// @notice Checks if address is user in DAO
-    /// @param user address
+    /// @param _user address
     /// @return boolean
-    function isUser(address user) public view returns (bool) {
-        return UserInformation[user].isUser;
+    function isUser(address _user) public view returns (bool) {
+        return s_UserInformation[_user].isUser;
     }
 
     /// @notice Gets information about User
     /// @dev returns UID of EAS attestations
-    /// @param user address
+    /// @param _user address
     /// @return Info about the user
-    function getUserInfo(address user) external view returns (UserInfo memory) {
-        return UserInformation[user];
+    function getUserInfo(address _user) external view returns (UserInfo memory) {
+        return s_UserInformation[_user];
     }
 
-    function isAdmin(address user) external view returns (bool) {
-        return Admin[user];
+    function isAdmin(address _user) external view returns (bool) {
+        return s_Admin[_user];
     }
 }

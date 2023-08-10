@@ -2,34 +2,28 @@
 
 pragma solidity >=0.8.0 <0.9.0;
 
-import "./Project.sol";
+import {Project, ProjectData} from "./Project.sol";
 import "./interfaces/IUserRegistry.sol";
 
-struct ProjectData {
-    string name;
-    string description;
-    string[] rolesNeeded;
-    bool searchingFunding;
-    uint256 fundingGoal;
-    address userContract;
-}
-
 contract ProjectFactory {
-    modifier onlyUser(address user) {
-        IUserRegistry(user).isUser(user);
-        _;
-    }
-
     event ProjectCreated(address indexed project, address indexed owner);
 
-    function createProject() public onlyUser(msg.sender) {
+    function createProject(ProjectData memory _projectData) public {
+        if (isUser(msg.sender) != true) {
+            revert ProjectFactory__NotDaoUser();
+        }
+
         /// @dev the constructor of Project needs to be passed two arguments:
         /// @param _owner the address of the owner of the project
         /// @param _projectData the data of the project
-        Project project = new Project(_projectData);
+        Project project = new Project(msg.sender, _projectData);
 
         emit ProjectCreated(address(project), msg.sender);
 
         // return address(project);
+    }
+
+    function isUser(address _user) public view returns (bool) {
+        return IUserRegistry(_user).isUser(_user);
     }
 }

@@ -40,36 +40,45 @@ contract Attester {
         s_Authorized[msg.sender] = true;
     }
 
-    function endorseSkill(bytes32 _refUID, address _user, bool _endorse) internal returns (bytes32) {
-        return s_eas.attest(
-            AttestationRequest({
-                schema: s_endorseSkillSchema, //endore schema
-                data: AttestationRequestData({
-                    recipient: _user,
-                    expirationTime: NO_EXPIRATION_TIME, // No expiration time
-                    revocable: true,
-                    refUID: _refUID,
-                    data: abi.encode(_endorse),
-                    value: 0 // No value/ETH
+    function endorseSkill(
+        bytes32 _refUID,
+        address _user,
+        bool _endorse
+    ) internal returns (bytes32) {
+        return
+            s_eas.attest(
+                AttestationRequest({
+                    schema: s_endorseSkillSchema, //endore schema
+                    data: AttestationRequestData({
+                        recipient: _user,
+                        expirationTime: NO_EXPIRATION_TIME, // No expiration time
+                        revocable: true,
+                        refUID: _refUID,
+                        data: abi.encode(_endorse),
+                        value: 0 // No value/ETH
+                    })
                 })
-            })
-        );
+            );
     }
 
-    function attestSkill(address _user, string memory _skill) internal returns (bytes32) {
-        return s_eas.attest(
-            AttestationRequest({
-                schema: s_attestSkillSchema, // attest skill schema
-                data: AttestationRequestData({
-                    recipient: _user, // No recipient
-                    expirationTime: NO_EXPIRATION_TIME, // No expiration time
-                    revocable: true,
-                    refUID: EMPTY_UID, // No references UI
-                    data: abi.encode(_skill),
-                    value: 0 // No value/ETH
+    function attestSkill(
+        address _user,
+        string memory _skill
+    ) internal returns (bytes32) {
+        return
+            s_eas.attest(
+                AttestationRequest({
+                    schema: s_attestSkillSchema, // attest skill schema
+                    data: AttestationRequestData({
+                        recipient: _user, // No recipient
+                        expirationTime: NO_EXPIRATION_TIME, // No expiration time
+                        revocable: true,
+                        refUID: EMPTY_UID, // No references UI
+                        data: abi.encode(_skill),
+                        value: 0 // No value/ETH
+                    })
                 })
-            })
-        );
+            );
     }
 
     function isAuthorized(address _user) public returns (bool isAuthorized) {
