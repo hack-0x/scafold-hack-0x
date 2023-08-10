@@ -26,6 +26,7 @@ contract Project {
 
     mapping(address => uint256) private s_investorAmounts;
     mapping(address => bool) private s_projectManager;
+    mapping(address => uint256) private s_merit;
 
     event managerAdded(address manager);
 
@@ -69,6 +70,11 @@ contract Project {
     function addManager(address _manager) public onlyManager {
         s_projectManager[_manager] = true;
         emit managerAdded(_manager);
+    }
+
+    function applyForRole() public onlyUser(msg.sender) {
+        // this function should add application on queue for manager to aprove
+        // if manager aprove it, then add user to teamMembers
     }
 
     // unfinished

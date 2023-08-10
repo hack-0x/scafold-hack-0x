@@ -6,7 +6,9 @@ import {Project, ProjectData} from "./Project.sol";
 import "./interfaces/IUserRegistry.sol";
 
 contract ProjectFactory {
-    event ProjectCreated(address indexed project, address indexed owner);
+    event ProjectCreated(address indexed project, address owner);
+
+    error ProjectFactory__NotDaoUser();
 
     function createProject(ProjectData memory _projectData) public {
         if (isUser(msg.sender) != true) {
